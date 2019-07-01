@@ -1,2 +1,2 @@
-# baidu_task
-百度前端学院练习
+# vue_task
+平时的vue practice
