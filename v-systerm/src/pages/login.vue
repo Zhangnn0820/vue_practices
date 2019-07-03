@@ -19,15 +19,13 @@
 </template>
 
 <script>
+  import {login, getAdminInfo} from '@/api/getData'
   export default {
     data() {
       var validatePass = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入用户名'));
         } else {
-          if (this.ruleForm.password !== '') {
-            this.$refs.ruleForm.validateField('checkPass');
-          }
           callback();
         }
       };
@@ -54,11 +52,25 @@
       };
     },
     methods: {
-      submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            alert(this.ruleForm.password)
-            alert('submit!');
+      async submitForm(formName) {
+        alert(this.ruleForm.username)
+        this.$refs[formName].validate(async (valid) => {
+					if (valid) {
+            const res = await login({user_name: this.ruleForm.username, password: this.ruleForm.password})
+            alert("接口返回数据"+JSON.stringify(res))
+						if (res.status == "200") {
+						// 	this.$message({
+            //     type: 'success',
+            //     message: '登录成功'
+		        // });
+              alert("登录成功")
+							this.$router.push('manage')
+						}else{
+							this.$message({
+		                        type: 'error',
+		                        message: res.message
+		                    });
+						}
           } else {
             console.log('error submit!!');
             return false;
